@@ -83,3 +83,36 @@ O user_id nunca deve vir no body da requisição
 - Dependências da aplicação -> npm install express prisma @prisma/client dotenv bcryptjs jsonwebtoken
 - Dependências de desenvolvimento -> npm install -D typescript ts-node-dev @types/express @types/node @types/bcryptjs @types/jsonwebtoken
 - Configurar TypeScript -> npx tsc --init
+
+
+src/
+│
+├── server.ts
+├── app.ts
+│
+├── routes/
+│   ├── user.routes.ts
+│   ├── session.routes.ts
+│   └── meal.routes.ts
+│
+├── controllers/
+│   ├── user.controller.ts
+│   ├── session.controller.ts
+│   └── meal.controller.ts
+│
+├── services/
+│   ├── user.service.ts
+│   ├── session.service.ts
+│   └── meal.service.ts
+│
+├── middlewares/
+│   └── auth.middleware.ts
+│
+├── lib/
+│   └── prisma.ts
+│
+└── utils/
+
+prisma/
+   ├── schema.prisma
+   └── migrations/
