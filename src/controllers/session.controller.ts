@@ -1,13 +1,23 @@
-import { Request, Response } from 'express'
-import { createSessionService } from '../services/session.service'
+import { Request, Response } from "express";
+import { registerSchema, loginSchema } from "../schemas/auth.schema";
+import { registerUser, loginUser } from "../services/session.service";
 
-export async function createSessionController(req: Request, res: Response) {
-  const { email, password } = req.body
+export async function register(req: Request, res: Response) {
+  try {
+    const data = registerSchema.parse(req.body);
+    const user = await registerUser(data.name, data.email, data.password);
+    res.status(201).json(user);
+  } catch (err: any) {
+    res.status(400).json({ error: err.errors ?? err.message });
+  }
+}
 
-  const result = await createSessionService({
-    email,
-    password,
-  })
-
-  return res.json(result)
+export async function login(req: Request, res: Response) {
+  try {
+    const data = loginSchema.parse(req.body);
+    const result = await loginUser(data.email, data.password);
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.errors ?? err.message });
+  }
 }

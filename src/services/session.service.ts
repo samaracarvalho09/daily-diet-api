@@ -1,38 +1,24 @@
-import { prisma } from '../lib/prisma'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-interface SessionProps {
-  email: string
-  password: string
-}
+const prisma = new PrismaClient();
 
-export async function createSessionService({
-  email,
-  password,
-}: SessionProps) {
+export const registerUser = async (name: string, email: string, password: string) => {
+  const hashedPassword = await bcrypt.hash(password, 10);
+  return prisma.user.create({
+    data: { name, email, password: hashedPassword }
+  });
+};
 
-  const user = await prisma.user.findUnique({
-    where: { email }
-  })
+export const loginUser = async (email: string, password: string) => {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) throw new Error("Usuário não encontrado");
 
-  if (!user) {
-    throw new Error('Invalid credentials')
-  }
+  const isValid = await bcrypt.compare(password, user.password);
+  if (!isValid) throw new Error("Senha incorreta");
 
-  const passwordMatch = await bcrypt.compare(password, user.password)
+  const token = jwt.sign({ sub: user.id }, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "1h" });
 
-  if (!passwordMatch) {
-    throw new Error('Invalid credentials')
-  }
-
-  const token = jwt.sign(
-    { userId: user.id },
-    'supersecret', // depois colocar no .env
-    { expiresIn: '1d' }
-  )
-
-  return {
-    token
-  }
-}
+  return { token, user: { id: user.id, name: user.name, email: user.email } };
+};

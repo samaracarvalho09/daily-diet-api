@@ -1,90 +1,61 @@
-### Regras da aplicação
+ <h1 align="center">Daily Diet API</h1><br>
 
 
+<p align="center"> API REST para controle de refeições com autenticação JWT. </p> 
 
-#### [ ] Deve ser possível criar um usuário
-1. Criar uma rota POST para cadastrar o usuário (`POST /users`)
-- name (string)
-- email (string – único)
-- password (string – deve ser criptografada)
+<p align="center"> <img src="https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white" /> <img src="https://img.shields.io/badge/Express-4.x-000000?style=for-the-badge&logo=express&logoColor=white" /> <img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma&logoColor=white" /> <img src="https://img.shields.io/badge/PostgreSQL-Database-316192?style=for-the-badge&logo=postgresql&logoColor=white" /> <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white" /> <img src="https://img.shields.io/badge/JWT-Authentication-black?style=for-the-badge&logo=jsonwebtokens" /> </p>
 
-#### [ ] Deve ser possível identificar o usuário entre as requisições
-2. Fazer sempre autenticação do usuário. Criar uma (`POST /sessions`)
+## 📌 Sobre o Projeto
+
+A Daily Diet API é uma API REST desenvolvida para controle de refeições, permitindo:
+
+- Cadastro de usuários
+- Autenticação via JWT
+- Registro de refeições
+- Controle de métricas nutricionais
+- Proteção de rotas com autenticação
+
+<br>
+
+## 🚀 Como Executar o Projeto
+
+1️⃣ Instalar dependências
+
+Dependências principais
 
 ```js
-body: {
-  "email": "",
-  "password": "" 
-}
+npm install express prisma @prisma/client dotenv bcryptjs jsonwebtoken`
 ```
 
-Regras:
-- Retornar um token JWT
-- O token deve ser enviado nas próximas requisições autenticadas
-- Todas as rotas de refeição devem exigir autenticação
+Dependências de desenvolvimento
 
-#### [ ] Deve ser possível registrar uma refeição feita, com as seguintes informações:
-3. Criar uma rota POST para cadastrar as refeições. (`POST /meal`)
-    
-    *As refeições devem ser relacionadas a um usuário.*
-    - Nome
-    - Descrição
-    - Data e Hora (datetime)
-    - Está dentro ou não da dieta (isOnDiet (boolean))
-  Regras:
-  - A refeição deve estar vinculada ao usuário autenticado
-  - O user_id deve ser obtido via token
+```js
+npm install -D typescript ts-node-dev @types/express @types/node @types/bcryptjs @types/jsonwebtoken`
+```
 
-#### [ ] Deve ser possível editar uma refeição, podendo alterar todos os dados acima
-4. Criar uma rota PUT para editar as refeições. (`PUT /meals/:id`)
+2️⃣ Configurar TypeScript
 
-#### [ ] Deve ser possível apagar uma refeição
-5. Criar uma rota DELETE para deletar as refeições. (`DELETE /meals/:id`)
-  Regras:
-  - O usuário só pode deletar refeições criadas por ele
+```js
+npx tsc --init
+```
 
-#### [ ] Deve ser possível listar todas as refeições de um usuário
-6. Criar uma rota GET para listar todas as refeiçoes (`GET /meals`)
-  Regras:
-  - Retornar apenas refeições do usuário autenticado
+3️⃣ Rodar o servidor
 
-#### [ ] Deve ser possível visualizar uma única refeição
-7. Criar uma rota GET para listar uma refeição especifica (`GET /meals/:id`)
-  Regras:
-  - O usuário só pode visualizar refeições criadas por ele
+```js
+npm run dev
+```
 
-#### [ ] Deve ser possível recuperar as métricas de um usuário
-8. Criar uma rota GET para recuperar as métricas de um usuário (`GET /meals/metrics`)
-    ```js
-    {
-      "totalMeals": 0,
-      "totalOnDiet": 0,
-      "totalOffDiet": 0,
-      "bestOnDietSequence": 0
-    }
-    ```
+4️⃣ Visualizar banco de dados (Prisma Studio)
 
-    - Quantidade total de refeições registradas
-    - Quantidade total de refeições dentro da dieta
-    - Quantidade total de refeições fora da dieta
-    - Melhor sequência de refeições dentro da dieta
+```js
+npx prisma studio
+```
 
-#### [ ] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
+<br>
 
-Regra de Segurança (Muito Importante)
-O usuário só pode visualizar, editar e deletar refeições que ele criou
-Todas as rotas de meals devem exigir autenticação
-O user_id nunca deve vir no body da requisição
+## Estrutura do Projeto
 
-
-### Primeiros passos
-
-- Criar estrutura das pastas
-- Dependências da aplicação -> npm install express prisma @prisma/client dotenv bcryptjs jsonwebtoken
-- Dependências de desenvolvimento -> npm install -D typescript ts-node-dev @types/express @types/node @types/bcryptjs @types/jsonwebtoken
-- Configurar TypeScript -> npx tsc --init
-
-
+```pgsql
 src/
 │
 ├── server.ts
@@ -112,7 +83,129 @@ src/
 │   └── prisma.ts
 │
 └── utils/
-
 prisma/
-   ├── schema.prisma
-   └── migrations/
+├── schema.prisma
+└── migrations/
+```
+<br>
+
+## Autenticação
+
+A autenticação é feita via JWT.
+
+Após login, envie o token no header:
+
+`Authorization: Bearer <token>`
+
+
+Todas as rotas de /meals exigem autenticação.
+
+<br>
+
+## Rotas da API
+
+  ### Usuário
+🔹 Registrar usuário
+
+```js
+POST http://localhost:3333/users
+
+{
+  "name": "Teste",
+  "email": "teste@email.com",
+  "password": "123456"
+}
+```
+
+🔹 Login
+
+```js
+POST http://localhost:3333/sessions
+
+{
+  "email": "teste@email.com",
+  "password": "123456"
+}
+```
+
+### Refeições
+
+🔹 Cadastrar refeição
+
+```js
+POST http://localhost:3333/meals
+
+{
+  "name": "Café da manhã",
+  "description": "Omelete e suco",
+  "date": "2026-02-17T08:00:00.000Z",
+  "isOnDiet": true
+}
+```
+
+🔹 Listar refeições
+```js
+GET http://localhost:3333/meals
+
+Header:
+Authorization: Bearer <token>
+```
+
+🔹 Visualizar refeição específica
+
+```js
+GET http://localhost:3333/meals/:id
+```
+
+🔹 Atualizar refeição
+
+```js
+PUT http://localhost:3333/meals/:id
+
+{
+  "name": "Sorvetinho",
+  "description": "Sobremesa",
+  "date": "2026-02-17T12:00:00.000Z",
+  "isOnDiet": false
+}
+```
+
+🔹 Deletar refeição
+```js
+DELETE http://localhost:3333/meals/:id
+```
+
+🔹 Recuperar métricas
+```js
+GET http://localhost:3333/meals/metrics
+
+Resposta:
+
+{
+  "totalMeals": 0,
+  "totalOnDiet": 0,
+  "totalOffDiet": 0,
+  "bestOnDietSequence": 0
+}
+```
+<br>
+
+## Regras de Segurança
+
+- O usuário só pode visualizar, editar e deletar refeições que ele criou
+- Todas as rotas de meals exigem autenticação
+- O user_id nunca deve ser enviado no body
+- O user_id deve ser extraído do token JWT
+
+<br>
+
+## Funcionalidades
+
+- Cadastro de usuário
+- Login com JWT
+- CRUD completo de refeições
+- Métricas de desempenho da dieta
+- Proteção de rotas
+ Separação em camadas (Controller, Service, Middleware)
+
+<br>

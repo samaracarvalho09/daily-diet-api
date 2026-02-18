@@ -3,8 +3,6 @@ import { app } from "./app";
 
 const PORT = 3333;
 
-console.log(process.env.DATABASE_URL, 'here');
-
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
