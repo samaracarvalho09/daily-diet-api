@@ -24,13 +24,13 @@ A Daily Diet API é uma API REST desenvolvida para controle de refeições, perm
 Dependências principais
 
 ```js
-npm install express prisma @prisma/client dotenv bcryptjs jsonwebtoken`
+npm install express prisma @prisma/client dotenv bcryptjs jsonwebtoken
 ```
 
 Dependências de desenvolvimento
 
 ```js
-npm install -D typescript ts-node-dev @types/express @types/node @types/bcryptjs @types/jsonwebtoken`
+npm install -D typescript ts-node-dev @types/express @types/node @types/bcryptjs @types/jsonwebtoken
 ```
 
 2️⃣ Configurar TypeScript
