@@ -1,10 +1,10 @@
-import { z, ZodObject, ZodRawShape } from "zod";
+import { z } from "zod";
 import { Request, Response, NextFunction } from "express";
 
 // Generic middleware for body, params, or query
 export const validate =
   (
-    schema: ZodObject<ZodRawShape>,
+    schema: z.ZodType,
     type: "body" | "params" | "query" = "body",
   ) =>
   (req: Request, res: Response, next: NextFunction) => {
@@ -18,5 +18,5 @@ export const validate =
 
 // Schema for validating meal ID
 export const mealIdParamsSchema = z.object({
-  id: z.string().uuid({ message: "ID da refeição inválido" }), // Validate UUID
+  id: z.string().uuid({ message: "ID da refeição inválido" }),
 });
