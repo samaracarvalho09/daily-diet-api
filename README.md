@@ -24,13 +24,13 @@ A Daily Diet API é uma API REST desenvolvida para controle de refeições, perm
 Dependências principais
 
 ```js
-npm install express prisma @prisma/client dotenv bcryptjs jsonwebtoken`
+npm install express prisma @prisma/client dotenv bcryptjs jsonwebtoken
 ```
 
 Dependências de desenvolvimento
 
 ```js
-npm install -D typescript ts-node-dev @types/express @types/node @types/bcryptjs @types/jsonwebtoken`
+npm install -D typescript ts-node-dev @types/express @types/node @types/bcryptjs @types/jsonwebtoken
 ```
 
 2️⃣ Configurar TypeScript
@@ -209,3 +209,81 @@ Resposta:
  Separação em camadas (Controller, Service, Middleware)
 
 <br>
+
+
+## Testes Automatizados
+
+<b>A aplicação possui testes automatizados utilizando:</br>
+
+- Vitest – Framework de testes
+- Supertest – Testes de requisições HTTP
+- Prisma (SQLite) – Banco de dados isolado para testes
+
+<b>Os testes validam:</b>
+
+- Registro de usuário
+- Login e geração de JWT
+- Criação de refeição autenticada
+- Listagem de refeições
+- Busca de refeição específica
+- Atualização de refeição
+
+ ### Estrutura de Testes
+  
+  ```pgsql
+test/
+├── meal.test.ts
+└── session.test.ts
+```
+
+### Banco de Dados de Teste
+
+Foi criado um banco exclusivo para testes:
+
+  ```pgsql
+prisma/test.db
+```
+
+Esse banco é utilizado apenas durante a execução dos testes, garantindo:
+
+- Isolamento do banco de desenvolvimento
+- Segurança dos dados reais
+- Testes independentes
+
+### Configuração do Vitest
+
+<b>Arquivo:</b>
+
+  ```pgsql
+vitest.config.ts
+```
+<b>Responsável por:</b>
+
+- Configurar ambiente de testes
+- Definir banco de dados de teste
+- Gerenciar setup e teardown
+
+### Como Executar os Testes
+
+<b>Instalar dependências de teste:</b>
+
+```js
+npm install -D vitest supertest @types/supertest
+```
+
+<b>Rodar os testes:</b>
+
+```js
+npm run test
+```
+
+
+### Cobertura
+
+Os testes garantem a validação do fluxo completo de autenticação e CRUD de refeições, assegurando:
+
+- Integridade das regras de negócio
+- Proteção de rotas via JWT
+- Isolamento de usuários
+- Persistência correta no banco de dados
+
